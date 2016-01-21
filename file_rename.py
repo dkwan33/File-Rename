@@ -1,7 +1,9 @@
 #!python3
 import re, glob, os
 
-def renamer(files, pattern, replacement):
+def renamer(files, pattern, replacement, **kwargs):
+    del = kwargs['del']
+
     for pathname in glob.glob(files):
         basename = os.path.basename(pathname)
         new_filename = re.sub(pattern, replacement, basename)
@@ -11,11 +13,12 @@ def renamer(files, pattern, replacement):
                 print ("success: {} changed to -> {}".format(pathname, new_filename))
             except:
                 print ("error: {} already exists".format(new_filename))
-                try:
-                    os.remove(pathname)
-                    print ("removed: {} because its a dupe".format(pathname))
-                except:
-                    print ("error: cannot remove {}".format(pathname))
+                if ('del'):
+                    try:
+                        os.remove(pathname)
+                        print ("removed: {} because its a dupe".format(pathname))
+                    except:
+                        print ("error: cannot remove {}".format(pathname))
 
 if __name__ == "__main__":
     print("running...")
